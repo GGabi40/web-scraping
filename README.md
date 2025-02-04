@@ -1,4 +1,4 @@
-# Proyecto de Scraping de Juegos
+# Proyecto de WEB Scraping
 
 Este repositorio contiene el código para realizar un proceso de **scraping** de datos desde el sitio web **GameMonetize**. El propósito es extraer información de juegos disponibles en esa plataforma y almacenarla en un formato organizado para su uso en otros proyectos.
 
