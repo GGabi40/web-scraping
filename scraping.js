@@ -27,7 +27,7 @@ async function scrapeGameDetails(gameURL) {
 
 // Scrape principal
 async function scrapeGames() {
-    const url = 'https://gamemonetize.com/'
+    const url = 'https://gamemonetize.com/games';
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
@@ -40,7 +40,7 @@ async function scrapeGames() {
         const title = $(element).find(".game-card__title").text().trim();
         const image = $(element).attr("data-image");
         const video = $(element).attr("data-src");
-        const link = `https://gamemonetize.com${$(element).attr("href")}`;
+        const link = $(element).attr("href");
 
         games.push({
             id,
@@ -54,16 +54,23 @@ async function scrapeGames() {
     // agarra los detalles
     for (let game of games) {
         console.log(`🕵️ Scrapeando: ${game.title}`)
-        const gameDetails = await scrapeGameDetails(game.link);
 
+        let gameDetails;
+
+        if (game.link.startsWith('https://gamemonetize.com')) {
+            gameDetails = await scrapeGameDetails(game.link);
+        } else {
+            const start = 'https://gamemonetize.com';
+            gameDetails = await scrapeGameDetails(start + game.link);
+        }
 
         gameDetailsList.push({
             id: game.id,
             title: game.title,
-            author: gameDetails.author,
+            author: gameDetails?.author || "Desconocido",
             image: game.image,
-            video: game.video,
-            description: gameDetails.description,
+            video: game.video || "No disponible",
+            description: gameDetails.description || "No disponible",
             iframeCode: gameDetails.iframeCode,
             categories: gameDetails.categories
         });
