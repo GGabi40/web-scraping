@@ -42,12 +42,15 @@ async function scrapeGames() {
         const video = $(element).attr("data-src");
         const link = $(element).attr("href");
 
+        const gameURL = link.split('/').pop();
+
         games.push({
             id,
             title,
             image,
             video,
-            link
+            link,
+            gameURL
         });
     });
 
@@ -72,7 +75,8 @@ async function scrapeGames() {
             video: game.video || "No disponible",
             description: gameDetails.description || "No disponible",
             iframeCode: gameDetails.iframeCode,
-            categories: gameDetails.categories
+            categories: gameDetails.categories,
+            gameURL: game.gameURL
         });
     }
 
